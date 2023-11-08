@@ -1,89 +1,87 @@
 import '../index.css';
+import axios from 'axios';
+
 import { Component } from 'react';
-import { nanoid } from 'nanoid';
+//import { nanoid } from 'nanoid';
 
-import { Section } from './Section/Section';
-import { ContactForm } from './ContactForm/ContactForm';
+import { Modal } from './Modal/Modal';
+import { Searchbar } from './Searchbar/Searchbar';
+import { Loader } from './Loader/Loader'
 
-import { Filter } from './Filter/Filter'
-import { ContactList } from './ContactList/ContactList';
+
+import { Button } from './Button/Button'
+import { ImageGallery } from './ImageGallery/ImageGallery';
+
+
+// {
+// "id": 3273425,
+// "tags": "northern lights, aurora, light phenomenon",
+// "webformatURL": "https://pixabay.com/get/ge6ea4e24ead762ed5fdfea56ddd35b5aa3acf45537a5089ac2eb228456589c9fdf043eb269339ec69a97455a3f0140315036aee3942bafaea6d32f3232836538_640.jpg",
+// "largeImageURL": "https://pixabay.com/get/gbb17875f4860de1c77a4a53350d8b3356b7f11017f33ad64a980731dba44f393375d73b9a96ce8852d2bd581dd372bd4511bef8534036a219809502ae45d3605_1280.jpg",
+// }
 
 
 export class App extends Component {
-  
   state = {
-    contacts: [
-      {id: 'id-1', name: 'Rosie Simpson', number: '459-12-56'},
-      {id: 'id-2', name: 'Hermione Kline', number: '443-89-12'},
-      {id: 'id-3', name: 'Eden Clements', number: '645-17-79'},
-      {id: 'id-4', name: 'Annie Copeland', number: '227-91-26'},
-    ],
-    name: '',
-    number: '',
-    filter: '',
+    pictures: [],
+    page: 1,
+    per_page: 12,
+    totalPictures: '',
+
+    q: '',
+
+
+    isLoading: false,
+    error: null,
+    
   }
 
-  handleAddContact = (contact) => {
-    const duplicate = this.state.contacts.some((contacts) => contacts.name === contact.name);
-
-    if (duplicate) {
-      alert(`${contact.name} is already in contacts!`);
-      return;
-    }
-
-    const finalContact = { ...contact, id: nanoid() }
+  fetchPictures = async () => {
+    const { data } = await axios.get('https://pixabay.com/api/?key=39251396-18173d9ed82e61dff39932134&image_type=photo&orientation=horizontal&safesearch=true&q=gold&page=3&per_page=12');
 
     this.setState({
-      contacts: [...this.state.contacts, finalContact]
+      pictures: data.hits,
+      totalPictures: data.totalHits
+
     })
-        
-    //console.log("Submit", contact)
-  };
 
-  handleInputChange = (event) => {
-    const value = event.target.value;
-    const name = event.target.name;
-    this.setState({ [name]: value });
+
   }
 
-  // filterContacts = (contacts, filter) => {
-  //   return contacts.filter(contact => contact.name.toLowerCase().includes(filter.toLowerCase())
-  //   );
-  // }
-
-
-  handleDeleteContact = contactId => {
-    //console.log(contactId)
-    this.setState({
-      contacts: this.state.contacts.filter(contact => contact.id !== contactId),
-    });
-  };
+  componentDidMount() {
+    this.fetchPictures();
+  }
 
   render() {   
     return (
       <>
-        {/* <h1>2-nd phonebook HW! 👍</h1> */}            
-        <Section title='Phonebook' >
-          <ContactForm
-            //state={this.state}
-            onChange={this.handleChange}
-            handleAddContact = {this.handleAddContact}
-          />
-        </Section>
+        <h1>3-nd Image Gallery HW! 🐱‍🏍</h1>
 
-        <Section title='Contacts' >
-          <Filter
-            filter={this.state.filter}
-            onChange={this.handleInputChange}
-          />
+        <Searchbar
+          //onChange={this.handleChange}    
+        />
 
-          <ContactList
-            contacts={this.state.contacts}
-            filter={this.state.filter}
-            handleDeleteContact={this.handleDeleteContact}
-          />
-        </Section>          
+        <Loader/>
+
+
+        
+        <ImageGallery
+          pictures={this.state.pictures}
+          // filter={this.state.filter}
+          // handleDeleteContact={this.handleDeleteContact}
+        >
+
+          <Loader/>
+                  
+        </ImageGallery>  
+
+
+        
+
+                 
+             
       </>
     );
   };
 }
+
