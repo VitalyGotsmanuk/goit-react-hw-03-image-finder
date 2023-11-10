@@ -1,19 +1,12 @@
 
-export const Filter = ({
-    filter,
-    onChange
+export const Button = ({
+    handleClick
 }) => {
-        
     return (
-        <label className="">
-                <p>Finde contacts by name</p>
-                <input
-                    type="text"
-                    name="filter"
-                    placeholder="Type to search"
-                    onChange={onChange}
-                    value={filter}
-                />
-        </label>
+        <button
+            onClick={handleClick}
+            type="click"
+            name="page"
+            className="button">Load more</button>  
     )
 }

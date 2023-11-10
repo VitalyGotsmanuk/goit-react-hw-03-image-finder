@@ -1,87 +1,170 @@
 import '../index.css';
 import axios from 'axios';
+import Notiflix, { Notify } from 'notiflix'; 
+
 
 import { Component } from 'react';
 //import { nanoid } from 'nanoid';
 
-import { Modal } from './Modal/Modal';
 import { Searchbar } from './Searchbar/Searchbar';
 import { Loader } from './Loader/Loader'
-
-
-import { Button } from './Button/Button'
 import { ImageGallery } from './ImageGallery/ImageGallery';
-
-
-// {
-// "id": 3273425,
-// "tags": "northern lights, aurora, light phenomenon",
-// "webformatURL": "https://pixabay.com/get/ge6ea4e24ead762ed5fdfea56ddd35b5aa3acf45537a5089ac2eb228456589c9fdf043eb269339ec69a97455a3f0140315036aee3942bafaea6d32f3232836538_640.jpg",
-// "largeImageURL": "https://pixabay.com/get/gbb17875f4860de1c77a4a53350d8b3356b7f11017f33ad64a980731dba44f393375d73b9a96ce8852d2bd581dd372bd4511bef8534036a219809502ae45d3605_1280.jpg",
-// }
-
+import { Button } from './Button/Button';
+import { Modal } from './Modal/Modal';
 
 export class App extends Component {
   state = {
     pictures: [],
-    page: 1,
-    per_page: 12,
-    totalPictures: '',
-
-    q: '',
-
-
-    isLoading: false,
-    error: null,
+    totalPictures: 0,
     
+    page: 1,
+    perPage: 12,
+    totalPages: 0,
+    searchQuery: '',
+
+    //searchQuery: 'book',
+    isOpenModal: false,
+    isMorePage: false,
+    isLoading: false,
+    error: null
   }
 
   fetchPictures = async () => {
-    const { data } = await axios.get('https://pixabay.com/api/?key=39251396-18173d9ed82e61dff39932134&image_type=photo&orientation=horizontal&safesearch=true&q=gold&page=3&per_page=12');
+    try {
+      this.setState({
+        isLoading: true,
+      })
 
-    this.setState({
-      pictures: data.hits,
-      totalPictures: data.totalHits
+      let searchQuery = this.state.searchQuery;
+      let page = this.state.page;
+      let perPage = this.state.perPage;
+      //let totalPages = this.state.totalPages;
 
-    })
+      const urlApi = `https://pixabay.com/api/`;
+      
+      const params = new URLSearchParams({
+        q: searchQuery,
+        key: `39251396-18173d9ed82e61dff39932134`,
+        image_type: `photo`,
+        orientation: `horizontal`,
+        safesearch: `true`,
+        page: page,
+        per_page: perPage,
+      });
 
+      const { data } = await axios.get(`${urlApi}?${params}`);
+
+      let totalPages = Math.ceil(data.totalHits/perPage);
+      //console.log(totalPages);
+
+      this.setState({
+        pictures: data.hits,
+        totalPictures: data.totalHits,
+        totalPages: totalPages,
+      })
+    }
+    catch (error) {
+      this.setState({error: error.message})
+    }
+    finally {
+      this.setState({
+        isLoading: false
+      })
+    }
+  }
+
+  handleInputChange = (event) => {
+    const value = event.target.value;
+    const name = event.target.name;
+    this.setState({ [name]: value });
+  }
+
+  handleSubmit = (event) => {
+        event.preventDefault();
+
+        const searchQuery = event.currentTarget.elements.searchQuery.value.trim();
+        //const searchQuery = event.target[0].value;
+
+    if (searchQuery === "") {
+      Notify.warning(`Attention! Field must be filled.`);
+    }
+    else { 
+      this.fetchPictures();
+
+      //  if(this.state.totalPictures === 0) {
+      //       Notify.warning(`Sorry, there are no images matching your search query. Please try again.`);
+      //   } else {
+      //       Notify.success(`Hooray! We found ${this.state.totalPictures} images.`);
+    
+      //   // element.list.insertAdjacentHTML(`beforeend`, createMarkup(allPict.hits));
+      //   // lightbox.refresh();
+        
+      //   // if (page < totalPages){
+      //   //     element.loadMore.classList.replace(`load-more-hidden`, `load-more`)
+      //   //  }
+      //  }
+        
+      console.log("Submit", searchQuery)
+    }
+        // this.setState({
+        //     searchQuery: searchQuery
+        // })
+        
+        // const contact = {
+        //     name,
+        //     number //: Number.parseFloat(number), //має бути число
+        // };
+            
+        // this.props.fetchPictures(searchQuery)  
+  }
+  
+  handleClick = () => { 
+    this.setState({ page: this.state.page + 1 })
+    //console.log(this.state.page)
+  }  
+
+  componentDidMount() {
 
   }
 
-  componentDidMount() {
-    this.fetchPictures();
+  componentDidUpdate(_, prevState) {
+    if (prevState.page !== this.state.page) { 
+        this.fetchPictures();
+    }
   }
 
   render() {   
     return (
       <>
-        <h1>3-nd Image Gallery HW! 🐱‍🏍</h1>
-
+        {/* <h1>3-nd Image Gallery HW! 🐱‍🏍</h1> */}
         <Searchbar
-          //onChange={this.handleChange}    
+          searchQuery={this.state.searchQuery}
+          onChange={this.handleInputChange}
+          handleSubmit={this.handleSubmit}    
         />
-
-        <Loader/>
-
-
-        
+        {this.state.isLoading && <Loader/>}
+        {this.state.error !== null && (
+          <p className="error-bage">
+            Oops, some error occured... {this.state.error}
+          </p>
+        )}
+       
         <ImageGallery
           pictures={this.state.pictures}
           // filter={this.state.filter}
           // handleDeleteContact={this.handleDeleteContact}
-        >
+        >                  
+        </ImageGallery>
 
-          <Loader/>
-                  
-        </ImageGallery>  
+        {this.state.totalPages >= this.state.page &&
+          <Button
+            handleClick={this.handleClick}
+          />}
 
-
-        
-
-                 
-             
+        {this.state.isOpenModal && <Modal
+          pictures={this.state.pictures}
+        />}
       </>
     );
   };
 }
-
