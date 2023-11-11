@@ -1,7 +1,8 @@
 import '../index.css';
+import React from 'react';
 import axios from 'axios';
 import Notiflix, { Notify } from 'notiflix'; 
-
+//import { useState } from 'react';
 
 import { Component } from 'react';
 //import { nanoid } from 'nanoid';
@@ -22,9 +23,11 @@ export class App extends Component {
     totalPages: 0,
     searchQuery: '',
 
-    //searchQuery: 'book',
+    modalData: null,
+    //selectedPictId: null,
     isOpenModal: false,
-    isMorePage: false,
+    
+    //isMorePage: false,
     isLoading: false,
     error: null
   }
@@ -72,6 +75,31 @@ export class App extends Component {
       })
     }
   }
+
+  openModal = (dataForModal) => {
+    this.setState({
+      isOpenModal: true,
+      modalData: dataForModal,
+    })
+  }
+
+  closeModal = () => {
+    this.setState({
+      isOpenModal: false,
+      modalData: null,
+    })
+  }
+
+  // onSelectPictId = (pictId) => {
+
+  //   // let pict = this.props.largeImageURL
+  //   console.log(pictId)
+
+  //   this.setState({
+  //     selectedPictId: pictId,
+  //     //isOpenModal: true,
+  //   })
+  // }
 
   handleInputChange = (event) => {
     const value = event.target.value;
@@ -151,8 +179,9 @@ export class App extends Component {
        
         <ImageGallery
           pictures={this.state.pictures}
+          openModal={this.openModal}
+
           // filter={this.state.filter}
-          // handleDeleteContact={this.handleDeleteContact}
         >                  
         </ImageGallery>
 
@@ -162,7 +191,8 @@ export class App extends Component {
           />}
 
         {this.state.isOpenModal && <Modal
-          pictures={this.state.pictures}
+          closeModal={this.closeModal}
+          modalData={this.state.modalData}
         />}
       </>
     );

@@ -1,11 +1,14 @@
 import { ImageGalleryItem } from './ImageGalleryItem';
 
-//import css from './FriendList.module.css';
+import css from './ImageGallery.module.css';
 
-export const ImageGallery = ({pictures}) => {
+export const ImageGallery = ({
+    pictures,
+    openModal
+    }) => {
 
     return (
-        <ul className="gallery">
+        <ul className={css.gallery}>
             {pictures
                 .map(pictures => (
                     <ImageGalleryItem
@@ -13,7 +16,8 @@ export const ImageGallery = ({pictures}) => {
                         id={pictures.id}
                         tags = {pictures.tags}
                         webformatURL={pictures.webformatURL}
-                        largeImageURL={pictures.largeImageURL}                     
+                        largeImageURL={pictures.largeImageURL}
+                        openModal={openModal}
                 />
             ))}
         </ul>

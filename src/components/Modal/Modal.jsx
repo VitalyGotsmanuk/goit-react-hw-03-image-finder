@@ -1,67 +1,53 @@
-//import css from './Modal.module.css';
+import css from './Modal.module.css';
 import React, { Component } from 'react';
-//import * as basicLightbox from 'basiclightbox';
 
-
-
-//import { StyledModal } from './Styled';
+import { StyledModal } from './Styled';
 
 export class Modal extends Component {
+
+    componentDidMount() {
+    window.addEventListener('keydown', this.handleKeyDown);
+    document.body.style.overflow = 'hidden';
+    };
+
+    componentWillUnmount() {
+        window.removeEventListener('keydown', this.handleKeyDown);
+        document.body.style.overflow = 'auto';
+    };
+
+    handleOverayClick = event => {
+        if (event.target === event.currentTarget) {
+        this.props.closeModal();
+        }
+    };
+
+    handleKeyDown = event => {
+        if (event.code === 'Escape') {
+        this.props.closeModal();
+        }
+    };
+
     render () {
         return (
-            
-            <div className="modal">
+            <StyledModal onClick={this.handleOverayClick}>
+            <div className={css.modal}>
                     <button
-                        // onClick={this.props.closeModal}
-                        className="closeBtn">
+                        onClick={this.props.closeModal}
+                        className={css.closeBtn}
+                    >
                         ✖
                     </button>
                         
-                <h3>picture</h3>
-                    <img src=""
-                        alt="" />
+                {/* <h3>picture</h3> */}
+                <img
+                    src={this.props.modalData.largeImageURL}
+                    alt={this.props.modalData.tags}
+                />
                 </div>
-
-            
+            </StyledModal>
         )
     }
 }
-
-
-// const instance = basicLightbox.create(`
-//     <img src="assets/images/image.png" width="800" height="600">
-// `)
-
-// instance.show()
-
-// import * as basicLightbox from 'basiclightbox'
-
-// const instance = basicLightbox.create(`
-//     <div class="modal">
-//         <p>
-//             Your first lightbox with just a few lines of code.
-//             Yes, it's really that simple.
-//         </p>
-//     </div>
-// `)
-
-// instance.show()
-
-// //======//
-
-// import * as basicLightbox from 'basiclightbox'
-
-// const instance = basicLightbox.create(`
-//     <img src="assets/images/image.png" width="800" height="600">
-// `)
-
-// instance.show()
-
-//===============================================//
-
-// import React, { Component } from 'react';
-
-// import { StyledModal } from './Styled';
 
 /*
 Методи життєвого циклу - це зарезервовані реактом методи(функції),
@@ -92,55 +78,14 @@ export class Modal extends Component {
     - Оновлюють(синхронізуються) дані зі стейту з локальним сховищем
 */
 
-// export default class Modal extends Component {
-//   state = {
-//     counter: 1,
-//   };
+//==============================================//
 
-//   componentDidMount() {
-//     window.addEventListener('keydown', this.handleKeyDown);
-//     document.body.style.overflow = 'hidden';
-//   }
+// import * as basicLightbox from 'basiclightbox'
 
-//   componentWillUnmount() {
-//     window.removeEventListener('keydown', this.handleKeyDown);
-//     document.body.style.overflow = 'auto';
-//   }
+// const instance = basicLightbox.create(`
+//     <img src="assets/images/image.png" width="800" height="600">
+// `)
 
-//   handleIncrementProduct = () => {
-//     this.setState(prevState => ({ counter: prevState.counter + 1 }));
-//   };
+// instance.show()
 
-//   handleOverayClick = event => {
-//     if (event.target === event.currentTarget) {
-//       this.props.closeModal();
-//     }
-//   };
-
-//   handleKeyDown = event => {
-//     if (event.code === 'Escape') {
-//       this.props.closeModal();
-//     }
-//   };
-
-//   render() {
-//     return (
-//       <StyledModal onClick={this.handleOverayClick}>
-//         <div className="modal">
-//           <button onClick={this.props.closeModal} className="closeBtn">
-//             ❌
-//           </button>
-//           <h2>Product Details</h2>
-//           <div>
-//             <h3>Title: {this.props.modalData.title}</h3>
-//             <p>Price: {this.props.modalData.price}$</p>
-//             <p>Discount: {this.props.modalData.discount}$</p>
-//             <button onClick={this.handleIncrementProduct}>
-//               Add product: {this.state.counter}
-//             </button>
-//           </div>
-//         </div>
-//       </StyledModal>
-//     );
-//   }
-// }
+//===============================================//

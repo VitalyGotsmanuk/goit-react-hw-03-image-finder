@@ -1,3 +1,5 @@
+import css from './Searchbar.module.css';
+
 export const Searchbar = ({
     searchQuery,
     onChange,
@@ -10,12 +12,17 @@ export const Searchbar = ({
     // }
 
     return (
-            <header className="searchbar">
+            <header className={css.searchbar}>
                 <form
                     onSubmit={handleSubmit}
-                    className="form">  
+                    className={css.form}>
+                
+                <button type="submit"
+                    className={css.btnSubmit }>
+                    <span className="button-label">Search</span>
+                </button>  
                 <input
-                className="input"
+                className={css.input}
                 name="searchQuery"
                 type="text"
                 autoComplete="off"
@@ -23,21 +30,13 @@ export const Searchbar = ({
                 placeholder="Search images and photos"
                 onChange={onChange}
                 value={searchQuery}        
-                />
-                    
-                <button type="submit" className="button">
-                <span className="button-label">Search</span>
-                </button>  
+                />                    
             </form>
             </header>
         )
     
 
 }
-
-
-
-
 
 // import { Component } from 'react';
 
@@ -68,29 +67,3 @@ export const Searchbar = ({
 //     //     console.log("Submit", searchQuery)
 
 //     // }
-
-//     render () {
-//         return (
-//             <header className="searchbar">
-//                 <form
-//                     onSubmit={this.handleSubmit}
-//                     className="form">  
-//                 <input
-//                 className="input"
-//                 name="searchQuery"
-//                 type="text"
-//                 autoComplete="off"
-//                 autoFocus
-//                 placeholder="Search images and photos"
-//                 //onChange={this.onChange}
-//                 //value={this.state.name}        
-//                 />
-                    
-//                 <button type="submit" className="button">
-//                 <span className="button-label">Search</span>
-//                 </button>  
-//             </form>
-//             </header>
-//         )
-//     }
-// }

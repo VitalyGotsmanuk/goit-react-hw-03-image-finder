@@ -1,9 +1,11 @@
-//import css from './FriendList.module.css';
+import css from './ImageGallery.module.css';
 
-export const ImageGalleryItem = ({ id, tags, webformatURL }) => {
+export const ImageGalleryItem = ({ id, tags, webformatURL, largeImageURL, openModal }) => {
     
     return (
-        <li className="gallery-item" id={id}>
+        <li className={css.galleryItem}
+            onClick={() => openModal({id, tags, largeImageURL})}
+            id={id}>
             <img
                 src={webformatURL}
                 alt={tags}
