@@ -108,10 +108,13 @@ export class App extends Component {
   }
 
   handleSubmit = (event) => {
-        event.preventDefault();
+    event.preventDefault();
+     this.setState({
+         page: 1
+      })
 
-        const searchQuery = event.currentTarget.elements.searchQuery.value.trim();
-        //const searchQuery = event.target[0].value;
+    const searchQuery = event.currentTarget.elements.searchQuery.value.trim();
+    //const searchQuery = event.target[0].value;
 
     if (searchQuery === "") {
       Notify.warning(`Attention! Field must be filled.`);
@@ -134,6 +137,7 @@ export class App extends Component {
         
       console.log("Submit", searchQuery)
     }
+
         // this.setState({
         //     searchQuery: searchQuery
         // })
@@ -147,7 +151,10 @@ export class App extends Component {
   }
   
   handleClick = () => { 
-    this.setState({ page: this.state.page + 1 })
+    this.setState({
+      page: this.state.page + 1,
+      //perPage: this.state.perPage + 12
+    })
     //console.log(this.state.page)
   }  
 
@@ -157,9 +164,14 @@ export class App extends Component {
 
   componentDidUpdate(_, prevState) {
     if (prevState.page !== this.state.page) { 
-        this.fetchPictures();
+      this.fetchPictures();
+     
     }
   }
+
+  componentWillUnmount() {
+        
+    };
 
   render() {   
     return (
@@ -185,7 +197,7 @@ export class App extends Component {
         >                  
         </ImageGallery>
 
-        {this.state.totalPages >= this.state.page &&
+        {this.state.totalPages > this.state.page &&
           <Button
             handleClick={this.handleClick}
           />}
