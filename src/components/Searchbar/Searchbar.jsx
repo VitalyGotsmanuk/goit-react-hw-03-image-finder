@@ -3,7 +3,7 @@ import css from './Searchbar.module.css';
 export const Searchbar = ({
     searchQuery,
     onChange,
-    handleSubmit
+    handleSearch
     
 }) => {
 
@@ -14,7 +14,7 @@ export const Searchbar = ({
     return (
             <header className={css.searchbar}>
                 <form
-                    onSubmit={handleSubmit}
+                    onSubmit={handleSearch}
                     className={css.form}>
                 
                 <button type="submit"

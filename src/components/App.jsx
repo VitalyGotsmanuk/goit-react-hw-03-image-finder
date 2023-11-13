@@ -1,7 +1,7 @@
 import '../index.css';
 import React from 'react';
 import axios from 'axios';
-import Notiflix, { Notify } from 'notiflix'; 
+import { Notify } from 'notiflix'; 
 //import { useState } from 'react';
 import { Component } from 'react';
 //import { nanoid } from 'nanoid';
@@ -103,7 +103,7 @@ export class App extends Component {
     this.setState({ [name]: value });
   }
 
-  handleSubmit = (event) => {
+  handleSearch = (event) => {
     event.preventDefault();
      this.setState({
          page: 1
@@ -175,7 +175,7 @@ export class App extends Component {
         <Searchbar
           searchQuery={this.state.searchQuery}
           onChange={this.handleInputChange}
-          handleSubmit={this.handleSubmit}    
+          handleSearch={this.handleSearch}    
         />
         {this.state.isLoading && <Loader/>}
         {this.state.error !== null && (
@@ -188,7 +188,6 @@ export class App extends Component {
           pictures={this.state.pictures}
           openModal={this.openModal}
 
-          // filter={this.state.filter}
         >                  
         </ImageGallery>
 
