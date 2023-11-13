@@ -3,10 +3,8 @@ import React from 'react';
 import axios from 'axios';
 import Notiflix, { Notify } from 'notiflix'; 
 //import { useState } from 'react';
-
 import { Component } from 'react';
 //import { nanoid } from 'nanoid';
-
 import { Searchbar } from './Searchbar/Searchbar';
 import { Loader } from './Loader/Loader'
 import { ImageGallery } from './ImageGallery/ImageGallery';
@@ -24,7 +22,6 @@ export class App extends Component {
     searchQuery: '',
 
     modalData: null,
-    //selectedPictId: null,
     isOpenModal: false,
     
     //isMorePage: false,
@@ -82,7 +79,6 @@ export class App extends Component {
       modalData: dataForModal,
     })
   }
-
   closeModal = () => {
     this.setState({
       isOpenModal: false,
@@ -114,7 +110,6 @@ export class App extends Component {
       })
 
     const searchQuery = event.currentTarget.elements.searchQuery.value.trim();
-    //const searchQuery = event.target[0].value;
 
     if (searchQuery === "") {
       Notify.warning(`Attention! Field must be filled.`);
@@ -210,3 +205,23 @@ export class App extends Component {
     );
   };
 }
+
+
+
+// import axios from 'axios';
+// const fetchImage = async (searchWord, page) => {
+//   const API_KEY = 'XXXXXXXXXXXXXXXXXXXXXXXXX';
+//   const BASE_URL = 'https://pixabay.com/api/';
+//   const options = {
+//     params: {
+//       key: API_KEY,
+//       q: searchWord,
+//       image_type: 'photo',
+//       orientation: 'horizontal',
+//       safesearch: 'true',
+//       page: page,
+//       per_page: 12,
+//     },
+//   };
+//   return await axios.get(BASE_URL, options);
+// };

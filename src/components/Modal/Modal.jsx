@@ -34,11 +34,7 @@ export class Modal extends Component {
                     <button
                         onClick={this.props.closeModal}
                         className={css.closeBtn}
-                    >
-                        ✖
-                    </button>
-                        
-                {/* <h3>picture</h3> */}
+                    >✖</button>        
                 <img
                     src={this.props.modalData.largeImageURL}
                     alt={this.props.modalData.tags}
@@ -48,6 +44,7 @@ export class Modal extends Component {
         )
     }
 }
+
 
 /*
 Методи життєвого циклу - це зарезервовані реактом методи(функції),
